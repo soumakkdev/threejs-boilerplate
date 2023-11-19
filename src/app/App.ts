@@ -1,9 +1,21 @@
-import { AxesHelper, GridHelper, PerspectiveCamera, Scene, Vector2, Vector3, WebGLRenderer } from 'three'
 import E from '@unseenco/e'
 import Stats from 'stats.js'
+import {
+	ACESFilmicToneMapping,
+	AxesHelper,
+	GridHelper,
+	PCFSoftShadowMap,
+	PerspectiveCamera,
+	SRGBColorSpace,
+	Scene,
+	Vector2,
+	Vector3,
+	WebGLRenderer,
+} from 'three'
 import { OrbitControls } from 'three-stdlib'
-import World from './World'
 import { Pane } from 'tweakpane'
+import Environment from './Environment'
+import World from './World'
 import { Events } from './helpers'
 
 interface AppProps {
@@ -39,7 +51,7 @@ export default class App {
 		this.width = window.innerWidth
 		this.height = window.innerHeight
 		this.aspect = this.width / this.height
-		this.cameraPosition = new Vector3(0, 1, 5)
+		this.cameraPosition = new Vector3(-3, 2, 5)
 		this.cursor = new Vector2()
 
 		this.scene = new Scene()
@@ -53,6 +65,10 @@ export default class App {
 		this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 		this.renderer.setClearColor('#151515')
 		this.renderer.setAnimationLoop(this.update)
+		this.renderer.shadowMap.enabled = true
+		this.renderer.shadowMap.type = PCFSoftShadowMap
+		this.renderer.outputColorSpace = SRGBColorSpace
+		this.renderer.toneMapping = ACESFilmicToneMapping
 		this.root.appendChild(this.renderer.domElement)
 
 		this.stats = new Stats()
@@ -64,18 +80,21 @@ export default class App {
 
 		this.axes = new AxesHelper(2)
 		this.axes.visible = false
+		this.axes.position.y = 0.001
 		this.scene.add(this.axes)
 
 		this.grid = new GridHelper()
 		this.grid.visible = false
+		this.grid.position.y = 0.001
 		this.scene.add(this.grid)
 
-		this.gui = new Pane({ title: 'Controls' })
+		this.gui = new Pane({ title: 'Controls', expanded: false })
 		this.gui.addBinding(this.axes, 'visible', { label: 'Axes' })
 		this.gui.addBinding(this.grid, 'visible', { label: 'Grid' })
 		this.gui.addBinding(this.orbit, 'enabled', { label: 'Orbit' })
 
 		new World()
+		new Environment()
 
 		E.on('resize', window, this.resize)
 		E.on('keydown', document, this.fullscreen)
