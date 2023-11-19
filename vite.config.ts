@@ -1,4 +1,6 @@
 import { defineConfig } from 'vite'
+import glslify from 'rollup-plugin-glslify'
+
 export default defineConfig({
 	root: './src',
 	publicDir: '../public',
@@ -10,4 +12,5 @@ export default defineConfig({
 		host: false,
 		open: false,
 	},
+	plugins: [glslify()],
 })

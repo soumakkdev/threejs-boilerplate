@@ -4,8 +4,11 @@ import E from '@unseenco/e'
 import { Events } from './helpers'
 import Clock from './Clock'
 
+// import vertexShader from './shaders/demo.vert'
+// import fragmentShader from './shaders/demo.frag'
+
 export default class World {
-	box: THREE.Mesh<THREE.BoxGeometry, THREE.MeshNormalMaterial>
+	box: THREE.Mesh<THREE.BoxGeometry, THREE.MeshStandardMaterial>
 	app: App
 	ground: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
 	constructor() {
@@ -16,7 +19,8 @@ export default class World {
 	}
 
 	setup = () => {
-		this.box = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshStandardMaterial({ color: 'hotpink' }))
+		// this.box = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.ShaderMaterial({ vertexShader: vertexShader, fragmentShader: fragmentShader }))
+		this.box = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshStandardMaterial({ color: 'skyblue' }))
 		this.box.position.y = 0.5
 		this.box.castShadow = true
 		this.app.scene.add(this.box)
